@@ -42,7 +42,13 @@
 #
 # Copyright 2018 Your name here, unless otherwise noted.
 #
-class ssh {
-
-
+#SINCE ITS INHERITED HERE, YOU DO NOT HAVE TO INHERIT IT IN THE OTHER MANIFEST FILES
+class ssh( 
+String $package_name = $ssh::params::package_name,
+String $service_name = $ssh::params::service_name, 
+) 
+inherits ssh::params
+{
+  class { 'ssh::install': } -> 
+  class { 'ssh::service': } 
 }
