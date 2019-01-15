@@ -44,11 +44,26 @@
 #
 #SINCE ITS INHERITED HERE, YOU DO NOT HAVE TO INHERIT IT IN THE OTHER MANIFEST FILES
 class ssh( 
-String $package_name = $ssh::params::package_name,
-String $service_name = $ssh::params::service_name, 
+#String $package_name        = $ssh::params::package_name,
+#String $service_name        = $ssh::params::service_name, 
+#Boolean $permit_root_login  = $ssh::params::permit_root_login,
+#Integer $port               = $ssh::params::port,
+String $package_name,
+String $service_name,
+String $ensure,
+String $service_ensure,
+Boolean $service_enable,
+Boolean $permit_root_login = false,
+Integer $port = 22,
 ) 
-inherits ssh::params
+#inherits ssh::params
 {
-  class { 'ssh::install': } -> 
-  class { 'ssh::service': } 
+  class { 'ssh::install':}  
+  class { 'ssh::service': 
+    require => Class['ssh::install'],
+  }
+
+  class {'ssh::config':
+    notify => Class['ssh::service'],
+  } 
 }
